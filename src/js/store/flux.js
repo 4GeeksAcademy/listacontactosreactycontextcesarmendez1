@@ -1,43 +1,66 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			contacts:[]
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
+			
 			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
+				
+					fetch("https://playground.4geeks.com/contact/agendas/Cesar/contacts")
+					.then((response)=>response.json())
+					.then(data => setStore({ contacts: data.contacts }))
+				
 			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
-			}
+			createcontact: (data) => {
+                
+                console.log(data);
+                const URL = "https://playground.4geeks.com/contact/agendas/Cesar/contacts";
+                const opt = {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "Application/json",
+                    },
+                    body: JSON.stringify(data),
+                };
+                fetch(URL, opt)
+                    .then((response) => {
+                        console.log("Respuesta:", response);
+                        if (response.ok) {
+                           
+                            alert("Contacto creado exitosamente");
+                        } else {
+                            alert("Error al crear contacto");
+                        }
+                    })
+                    .catch((error) => {
+                        console.log("Error:", error);
+                        alert("Error al crear contacto");
+                    });
+            },
+			deleteContact: (id) => {
+				console.log("funciona")
+				console.log(id)
+                const actions = getActions();
+               
+                fetch(`https://playground.4geeks.com/contact/agendas/Cesar/contacts/${id}`, {
+                    method: "DELETE"
+                })
+                .then((response) => {
+                    console.log("Respuesta:", response);
+                    if (response.ok) {
+                        actions.loadSomeData(); // Actualizar contactos después de la eliminación.
+                        alert("Contacto eliminado exitosamente");
+                    } else {
+                        alert("Error al eliminar contacto");
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error:", error);
+                    alert("Error al eliminar contacto");
+                });
+            },
 		}
 	};
 };
