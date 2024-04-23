@@ -61,6 +61,33 @@ const getState = ({ getStore, getActions, setStore }) => {
                     alert("Error al eliminar contacto");
                 });
             },
+            editcontact: (data,id) => {
+                console.log(id)
+                console.log(data)
+                const actions = getActions();
+                const URL = `https://playground.4geeks.com/contact/agendas/Cesar/contacts/${id}`;
+                const opt = {
+                    method: "PUT",
+                    headers: {
+                        "Content-type": "Application/json",
+                    },
+                    body: JSON.stringify(data),
+                };
+                fetch(URL, opt)
+                    .then((response) => {
+                        console.log("Respuesta:", response);
+                        if (response.ok) {
+                            actions.loadSomeData(); 
+                            alert("Contacto actualizado exitosamente");
+                        } else {
+                            alert("Error al actualizar contacto");
+                        }
+                    })
+                    .catch((error) => {
+                        console.log("Error:", error);
+                        alert("Error al actualizar contacto");
+                    });
+            },
 		}
 	};
 };

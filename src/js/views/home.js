@@ -1,6 +1,6 @@
 
 import React, { useContext, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 import "../../styles/home.css";
 import { Context } from "../store/appContext"
 export const Home = () => {
@@ -24,7 +24,9 @@ export const Home = () => {
                 <p className="card-text"><i className="fa-solid fa-envelope"></i> {item.email}</p>
                 <p className="card-text"><i className="fa-solid fa-location-dot"></i> {item.address}</p>
                 <p className="card-text"><i className="fa-solid fa-phone"></i> {item.phone}</p>
+                <Link to={`/editar/${item.id}`}>
                 <button type="button" class="btn btn-primary btn-lg" ><i className="fa-solid fa-pen-to-square"></i></button>
+                </Link>
                 <button type="button" class="btn btn-secondary btn-lg" onClick={()=>actions.deleteContact(item.id)}><i className="fa-solid fa-trash"></i></button>
                 
                 
